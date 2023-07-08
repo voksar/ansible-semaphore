@@ -1,0 +1,55 @@
+---
+- hosts: all
+  gather_facts: no
+  
+  tasks:
+    - block:
+        - name: Read certificate into Base64
+          ansible.builtin.slurp:
+            src: "/certs/star_voksar_cloud/star_voksar_cloud_win.pfx"
+          register: cert_b64
+          when: cert.changed == true
+          no_log: true
+
+        - name: Upload SSL certificate to Fortinet
+          ansible.builtin.uri:
+            url: "https://10.0.0.1/api/v2/monitor/vpn-certificate/local/import?access_token=Gwskn7ydjtgd31qk8sz6hk6xbb1nsf"
+            method: POST
+            body_format: json
+            body:
+              type: pkcs12
+              certname: star.voksar.cloud
+              password: supdude39
+              scope: global
+              file_content: "{{cert_b64.content}}"
+            validate_certs: false
+          when: cert.changed == true
+          delegate_to: localhost
+          no_log: true
+
+        - name: Change VPN certificate to newly uploaded cert
+          ansible.builtin.uri:
+            url: "https://10.0.0.1/api/v2/cmdb/vpn.ssl/settings?access_token=Gwskn7ydjtgd31qk8sz6hk6xbb1nsf"
+            method: PUT
+            body:
+              servercert:
+                q_origin_key: "star.voksar.cloud"
+            validate_certs: false
+            body_format: json
+          when: cert.changed == true
+          delegate_to: localhost
+          no_log: true
+
+        - name: Change SSO certificate to newly uploaded cert
+          ansible.builtin.uri:
+            url: "https://10.0.0.1/api/v2/cmdb/user/saml/ssl-azure-saml?access_token=Gwskn7ydjtgd31qk8sz6hk6xbb1nsf"
+            method: PUT
+            body:
+              cert: "star.voksar.cloud"
+            body_format: json
+            validate_certs: false
+          when: cert.changed == true
+          delegate_to: localhost
+          no_log: true
+
+        - meta: end_play
