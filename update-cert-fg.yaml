@@ -6,7 +6,7 @@
     - block:
         - name: Read certificate into Base64
           ansible.builtin.slurp:
-            src: "~/certs/star_voksar_cloud/star_voksar_cloud_win.pfx"
+            src: "/mnt/cert-store/star_voksar_cloud/star_voksar_cloud_win.pfx"
           register: cert_b64
 
         - name: Upload SSL certificate to Fortinet
