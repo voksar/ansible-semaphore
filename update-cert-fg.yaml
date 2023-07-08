@@ -4,15 +4,10 @@
   
   tasks:
     - block:
-        - name: Register Cert
-          register: cert
-          no_log: true
-          
         - name: Read certificate into Base64
           ansible.builtin.slurp:
             src: "/certs/star_voksar_cloud/star_voksar_cloud_win.pfx"
           register: cert_b64
-          when: cert.changed == true
 
         - name: Upload SSL certificate to Fortinet
           ansible.builtin.uri:
@@ -26,7 +21,6 @@
               scope: global
               file_content: "{{cert_b64.content}}"
             validate_certs: false
-          when: cert.changed == true
           delegate_to: localhost
 
         - name: Change VPN certificate to newly uploaded cert
@@ -38,7 +32,6 @@
                 q_origin_key: "star.voksar.cloud"
             validate_certs: false
             body_format: json
-          when: cert.changed == true
           delegate_to: localhost
 
         - name: Change SSO certificate to newly uploaded cert
@@ -49,7 +42,6 @@
               cert: "star.voksar.cloud"
             body_format: json
             validate_certs: false
-          when: cert.changed == true
           delegate_to: localhost
 
         - meta: end_play
