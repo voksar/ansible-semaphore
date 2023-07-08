@@ -4,6 +4,10 @@
   
   tasks:
     - block:
+        - name: Register Cert
+          register: cert
+          no_log: true
+          
         - name: Read certificate into Base64
           ansible.builtin.slurp:
             src: "/certs/star_voksar_cloud/star_voksar_cloud_win.pfx"
