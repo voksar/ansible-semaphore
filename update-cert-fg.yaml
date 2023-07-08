@@ -9,7 +9,6 @@
             src: "/certs/star_voksar_cloud/star_voksar_cloud_win.pfx"
           register: cert_b64
           when: cert.changed == true
-          no_log: true
 
         - name: Upload SSL certificate to Fortinet
           ansible.builtin.uri:
@@ -25,7 +24,6 @@
             validate_certs: false
           when: cert.changed == true
           delegate_to: localhost
-          no_log: true
 
         - name: Change VPN certificate to newly uploaded cert
           ansible.builtin.uri:
@@ -38,7 +36,6 @@
             body_format: json
           when: cert.changed == true
           delegate_to: localhost
-          no_log: true
 
         - name: Change SSO certificate to newly uploaded cert
           ansible.builtin.uri:
@@ -50,6 +47,5 @@
             validate_certs: false
           when: cert.changed == true
           delegate_to: localhost
-          no_log: true
 
         - meta: end_play
