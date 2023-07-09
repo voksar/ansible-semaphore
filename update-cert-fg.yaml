@@ -5,8 +5,12 @@
   tasks:
     - block:
         - name: "Read yml file"
-          ansible.builtin.shell: "cat /mnt/cert-store/api"
-          register: fgapikey
+          ansible.builtin.shell: "cat /mnt/cert-store/api.yaml"
+          register: result
+
+        - name: "Parse yml into variable"
+          set_fact:
+            fgapikey: "{{ result.stdout | from_yaml }}"
     
         - name: Read certificate into Base64
           ansible.builtin.slurp:
