@@ -4,9 +4,9 @@
   
   tasks:
     - block:
-        - name: Include Vars
-          ansible.builtin.include_vars:
-            file: /mnt/cert-store/api.yaml
+        - name: "Read yml file"
+          ansible.builtin.shell: "cat /mnt/cert-store/api"
+          register: fgapikey
     
         - name: Read certificate into Base64
           ansible.builtin.slurp:
