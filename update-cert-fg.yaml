@@ -7,10 +7,6 @@
         - name: "Read yml file"
           ansible.builtin.shell: "cat /mnt/cert-store/api"
           register: result
-
-        - name: "Parse yml into variable"
-          set_fact:
-            fgapikey: "{{ result.stdout }}"
     
         - name: Read certificate into Base64
           ansible.builtin.slurp:
@@ -19,7 +15,7 @@
 
         - name: Upload SSL certificate to Fortinet
           ansible.builtin.uri:
-            url: "https://10.0.0.1/api/v2/monitor/vpn-certificate/local/import?access_token={{ fgapikey }}"
+            url: "https://10.0.0.1/api/v2/monitor/vpn-certificate/local/import?access_token={{ result.stdout }}"
             method: POST
             body_format: json
             body:
@@ -33,7 +29,7 @@
 
         - name: Change VPN certificate to newly uploaded cert
           ansible.builtin.uri:
-            url: "https://10.0.0.1/api/v2/cmdb/vpn.ssl/settings?access_token={{ fgapikey }}"
+            url: "https://10.0.0.1/api/v2/cmdb/vpn.ssl/settings?access_token={{ result.stdout }}"
             method: PUT
             body:
               servercert:
@@ -44,7 +40,7 @@
 
         - name: Change SSO certificate to newly uploaded cert
           ansible.builtin.uri:
-            url: "https://10.0.0.1/api/v2/cmdb/user/saml/ssl-azure-saml?access_token={{ fgapikey }}"
+            url: "https://10.0.0.1/api/v2/cmdb/user/saml/ssl-azure-saml?access_token={{ result.stdout }}"
             method: PUT
             body:
               cert: "star.voksar.cloud"
