@@ -1,10 +1,9 @@
 ---
 - hosts: all
   tasks:
-  - name: Make sure the current version of Qemu-Guest-Agent is installed.
-    dnf:
+  - name: Install Qemu-Guest-Agent
+    ansible.builtin.apt:
       name: qemu-guest-agent
-      state: latest
   - name: Enable service httpd and ensure it is not masked
     ansible.builtin.systemd:
       name: qemu-guest-agent
