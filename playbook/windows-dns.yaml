@@ -3,8 +3,8 @@
   tasks:
     name: Create A record in Voksar.Cloud Zone
     community.windows.win_dns_record:
-      name: "testansible"
-      type: "A"
-      values:
-        - 10.0.0.16
-      zone: "voksar.cloud"
+      - name: "testansible"
+        type: "A"
+        values:
+          - 10.0.0.16
+        zone: "voksar.cloud"
