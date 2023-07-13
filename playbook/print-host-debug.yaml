@@ -10,4 +10,4 @@
     ansible.builtin.debug:
       var: hostvars[inventory_hostname]
       verbosity: 4
-    when: "'Windows' not in ansible_facts['distribution']"
+    #when: "'Windows' not in ansible_facts['distribution']"
