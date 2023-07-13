@@ -2,7 +2,7 @@
 - hosts: pterodactyl:webservers
   tasks:
     name: Create A record in Voksar.Cloud Zone
-      community.windows.wind_dns_record:
+      community.windows.win_dns_record:
         name: "testansible"
         type: "A"
         values:
