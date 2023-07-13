@@ -1,5 +1,5 @@
 ---
-- hosts: npm
+- hosts: npm:webservers:pterodactyl
   tasks:
     - name: Update Apt Packages
       apt:
