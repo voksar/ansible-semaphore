@@ -1,5 +1,5 @@
 ---
-- hosts: pterodactyl:webservers
+- hosts: all
   tasks:
     name: Create A record in Voksar.Cloud Zone
     community.windows.win_dns_record:
